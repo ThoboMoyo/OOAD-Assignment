@@ -1,0 +1,188 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane fx:controller="DashboardController"
+            prefHeight="600.0"
+            prefWidth="800.0"
+            style="-fx-background-color: #101827;"
+            xmlns="http://javafx.com/javafx/26"
+            xmlns:fx="http://javafx.com/fxml/1">
+
+    <children>
+
+        <!-- Sidebar -->
+        <VBox alignment="TOP_CENTER"
+              prefHeight="600.0"
+              prefWidth="200.0"
+              spacing="20.0"
+              style="-fx-background-color: #172554; -fx-padding: 25px;">
+
+            <children>
+                <Label text="Thobo's Bank"
+                       style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: white;" />
+
+                <Button text="Dashboard"
+                        prefHeight="40.0"
+                        prefWidth="150.0"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-alignment: CENTER_LEFT; -fx-cursor: hand;" />
+
+                <Button text="My Accounts"
+                        onAction="#handleAccounts"
+                        prefHeight="40.0"
+                        prefWidth="150.0"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-alignment: CENTER_LEFT; -fx-cursor: hand;" />
+
+                <Button text="Transactions"
+                        onAction="#handleTransactions"
+                        prefHeight="40.0"
+                        prefWidth="150.0"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-alignment: CENTER_LEFT; -fx-cursor: hand;" />
+
+                <Button text="Logout"
+                        onAction="#handleLogout"
+                        prefHeight="40.0"
+                        prefWidth="150.0"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-alignment: CENTER_LEFT; -fx-cursor: hand;" />
+            </children>
+        </VBox>
+
+        <!-- Main Content -->
+        <AnchorPane layoutX="200.0"
+                    prefHeight="600.0"
+                    prefWidth="600.0"
+                    style="-fx-background-color: #F8FAFC;">
+
+            <children>
+
+                <Label text="Dashboard Overview"
+                       layoutX="30.0"
+                       layoutY="30.0"
+                       style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #172554;" />
+
+                <Label text="Welcome back, Thobo!"
+                       layoutX="30.0"
+                       layoutY="65.0"
+                       style="-fx-font-size: 14px; -fx-text-fill: #64748B;" />
+
+                <!-- Account Summary Cards -->
+                <HBox layoutX="30.0"
+                      layoutY="100.0"
+                      prefHeight="130.0"
+                      prefWidth="540.0"
+                      spacing="0">
+
+                    <children>
+
+                        <VBox prefHeight="120.0"
+                              prefWidth="170.0"
+                              spacing="10.0"
+                              style="-fx-background-color: white; -fx-background-radius: 12; -fx-padding: 15; -fx-border-color: #E2E8F0; -fx-border-radius: 12;">
+
+                            <children>
+                                <Label text="Total Balance"
+                                       style="-fx-font-size: 13px; -fx-text-fill: #64748B;" />
+
+                                <Label fx:id="totalBalanceLabel"
+                                       text="BWP 0.00"
+                                       style="-fx-font-size: 16px; -fx-text-fill: #172554; -fx-font-weight: bold;" />
+                            </children>
+                        </VBox>
+
+                        <VBox prefHeight="120.0"
+                              prefWidth="170.0"
+                              spacing="10.0"
+                              style="-fx-background-color: white; -fx-background-radius: 12; -fx-padding: 15; -fx-border-color: #E2E8F0; -fx-border-radius: 12;">
+
+                            <children>
+                                <Label text="Savings Account"
+                                       style="-fx-font-size: 13px; -fx-text-fill: #64748B;" />
+
+                                <Label fx:id="savingsCountLabel"
+                                       text="0"
+                                       style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #172554;" />
+                            </children>
+                        </VBox>
+
+                        <VBox prefHeight="120.0"
+                              prefWidth="170.0"
+                              spacing="10.0"
+                              style="-fx-background-color: white; -fx-background-radius: 12; -fx-padding: 15; -fx-border-color: #E2E8F0; -fx-border-radius: 12;">
+
+                            <children>
+                                <Label text="Investment Accounts"
+                                       style="-fx-font-size: 13px; -fx-text-fill: #64748B;" />
+
+                                <Label fx:id="investmentCountLabel"
+                                       text="0"
+                                       style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #172554;" />
+                            </children>
+                        </VBox>
+
+                    </children>
+                </HBox>
+
+                <!-- Deposit Button -->
+                <Button fx:id="depositButton"
+                        text="+ Make a Deposit"
+                        layoutX="30.0"
+                        layoutY="245.0"
+                        onAction="#handleDeposit"
+                        mnemonicParsing="false"
+                        prefHeight="40.0"
+                        prefWidth="160.0"
+                        style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand;" />
+
+                
+                <Button text="- Make a Withdrawal"
+                        layoutX="30.0"
+                        layoutY="295.0"
+                        onAction="#handleWithdrawal"
+                        mnemonicParsing="false"
+                        prefHeight="40.0"
+                        prefWidth="160.0"
+                        style="-fx-background-color: #DC2626; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand;" />
+
+                
+                <Button text="Pay Interest"
+                        layoutX="30.0"
+                        layoutY="345.0"
+                        onAction="#handlePayInterest"
+                        mnemonicParsing="false"
+                        prefHeight="40.0"
+                        prefWidth="160.0"
+                        style="-fx-background-color: #059669; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand;" />
+
+                <!-- Recent Transactions -->
+                <Label text="Recent Transactions"
+                       layoutX="30.0"
+                       layoutY="280.0"
+                       style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #172554;" />
+
+                <TableView fx:id="transactionTable"
+                           layoutX="30.0"
+                           layoutY="320.0"
+                           prefHeight="220.0"
+                           prefWidth="540.0">
+
+                    <columns>
+                        <TableColumn text="Transaction ID" prefWidth="120.0" />
+                        <TableColumn text="Account" prefWidth="120.0" />
+                        <TableColumn text="Type" prefWidth="120.0" />
+                        <TableColumn text="Amount" prefWidth="140.0" />
+                    </columns>
+
+                </TableView>
+
+            </children>
+        </AnchorPane>
+
+    </children>
+</AnchorPane>
