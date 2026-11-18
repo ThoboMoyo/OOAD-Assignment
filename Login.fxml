@@ -17,7 +17,14 @@
             <Label style="-fx-font-size: 13px; -fx-text-fill: #64748B;" text="Please sign in to continue" />
             <TextField id="usernameField" fx:id="usernameField" promptText="Username" style="-fx-background-color: #F1F5F9; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #CBD5E1; -fx-padding: 12; -fx-font-size: 14px;" />
             <PasswordField id="passwordField" fx:id="passwordField" promptText="Password" style="-fx-background-color: #F1F5F9; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #CBD5E1; -fx-padding: 12; -fx-font-size: 14px;" />
-            <Button id="loginButton" fx:id="loginButton" mnemonicParsing="false" prefHeight="45.0" prefWidth="300.0" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand;" text="LOGIN" />
+            <Button id="loginButton"
+        fx:id="loginButton"
+        mnemonicParsing="false"
+        prefHeight="45.0"
+        prefWidth="300.0"
+        onAction="#handleLogin"
+        style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand;"
+        text="LOGIN" />
             <Label alignment="BOTTOM_LEFT" style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;" text="Banking System • Secure Access" />
          </children>
       </VBox>

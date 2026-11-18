@@ -47,8 +47,12 @@ public class LoginController {
 
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Navigation Error");
-                alert.setHeaderText("Could Not Open Dashboard");
-                alert.setContentText("Please check Dashboard.fxml.");
+                alert.setHeaderText("Dashboard Loading Failed");
+                alert.setContentText(
+                    e.getMessage() + "\n\nCause: " +
+                    (e.getCause() == null ? "Unknown" :
+                    e.getCause().getMessage())
+                );
                 alert.showAndWait();
             }
         }
