@@ -1,9 +1,9 @@
 # Compiled Java files
 *.class
 bin/
+target/
 
 # Local IDE configuration
 .project
 .classpath
 .settings/
-.vscode/
