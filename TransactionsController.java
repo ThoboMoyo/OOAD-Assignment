@@ -1,12 +1,15 @@
-
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Alert;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.stage.Stage;
+
+import java.sql.SQLException;
 
 public class TransactionsController {
 
@@ -72,9 +75,33 @@ public class TransactionsController {
             amountColumn, dateColumn
         );
 
-        transactionsTable.getItems().setAll(
-            BankData.transactions
-        );
+        // Load transactions directly from SQL Server
+        loadTransactions();
+    }
+
+    private void loadTransactions() {
+
+        try {
+            TransactionDAO transactionDAO = new TransactionDAO();
+
+            transactionsTable.setItems(
+                FXCollections.observableArrayList(
+                    transactionDAO.getTransactions()
+                )
+            );
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Database Error");
+            alert.setHeaderText("Could not load transactions");
+            alert.setContentText(
+                "Please check your database connection and try again."
+            );
+            alert.showAndWait();
+        }
     }
 
     @FXML

@@ -24,4 +24,16 @@ public class Customer {
     public List<Account> getAccount() {
         return accounts;
     }
+
+    public String getFirstname() {
+    return firstname;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public String getAddress() {
+        return address;
+    }
 }

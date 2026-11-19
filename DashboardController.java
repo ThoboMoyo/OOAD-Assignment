@@ -14,6 +14,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.stage.Stage;
 
 import java.util.Optional;
+import java.sql.SQLException;
 
 public class DashboardController {
 
@@ -163,6 +164,7 @@ public class DashboardController {
             Account account = null;
 
             switch (selectedAccount.get()) {
+
                 case "Savings - SA123":
                     account = BankData.savings;
                     break;
@@ -178,17 +180,23 @@ public class DashboardController {
 
             if (account != null) {
 
-                account.deposit(amount);
+                // Save deposit and transaction to SQL Server
+                AccountDAO accountDAO = new AccountDAO();
 
-                Transaction transaction = new Transaction(
-                    BankData.nextTransactionID++,
-                    "Deposit",
-                    amount,
-                    account.getAccountNumber()
+                accountDAO.depositAndRecord(
+                    account.getAccountNumber(),
+                    amount
                 );
 
-                BankData.transactions.add(transaction);
+                // Update the in-memory account after database success
+                account.deposit(amount);
 
+                // Reload transaction history from SQL Server
+                TransactionDAO transactionDAO = new TransactionDAO();
+
+                BankData.transactions = transactionDAO.getTransactions();
+
+                // Refresh dashboard
                 refreshDashboard();
                 refreshTransactions();
 
@@ -196,16 +204,23 @@ public class DashboardController {
                     String.format(
                         "BWP %.2f deposited successfully into %s.",
                         amount, selectedAccount.get()
-                    ));
+                    )
+                );
             }
 
         } catch (NumberFormatException e) {
 
             showAlert("Invalid Input",
                 "Please enter a valid numerical amount.");
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+
+            showAlert("Database Error",
+                "The deposit could not be saved. Please try again.");
         }
     }
-
 
     @FXML
     private void handleWithdrawal() {
@@ -227,7 +242,6 @@ public class DashboardController {
             return;
         }
 
-        // Savings accounts do not allow withdrawals.
         if (selectedAccount.get().equals("Savings - SA123")) {
             showAlert("Withdrawal Not Allowed",
                 "Withdrawals are not allowed on savings accounts.");
@@ -259,6 +273,7 @@ public class DashboardController {
             Account account = null;
 
             switch (selectedAccount.get()) {
+
                 case "Investment - IA123":
                     account = BankData.investment;
                     break;
@@ -296,7 +311,8 @@ public class DashboardController {
                 String.format(
                     "BWP %.2f withdrawn successfully from %s.",
                     amount, selectedAccount.get()
-                ));
+                )
+            );
 
         } catch (NumberFormatException e) {
 
@@ -305,11 +321,9 @@ public class DashboardController {
         }
     }
 
-
     @FXML
     private void handlePayInterest() {
 
-        // Calculate and pay savings account interest
         double savingsInterest = BankData.savings.calculateInterest();
         BankData.savings.payInterest();
 
@@ -322,8 +336,6 @@ public class DashboardController {
 
         BankData.transactions.add(savingsTransaction);
 
-
-        // Calculate and pay investment account interest
         double investmentInterest = BankData.investment.calculateInterest();
         BankData.investment.payInterest();
 
@@ -336,8 +348,6 @@ public class DashboardController {
 
         BankData.transactions.add(investmentTransaction);
 
-
-        // Refresh dashboard information
         refreshDashboard();
         refreshTransactions();
 
@@ -350,7 +360,6 @@ public class DashboardController {
             )
         );
     }
-
 
     @FXML
     private void handleAccounts() {
@@ -370,6 +379,7 @@ public class DashboardController {
     private void navigateTo(String fxmlFile, String title) {
 
         try {
+
             Parent root = FXMLLoader.load(
                 getClass().getResource(fxmlFile)
             );
@@ -380,7 +390,9 @@ public class DashboardController {
             stage.setTitle(title);
 
         } catch (Exception e) {
+
             e.printStackTrace();
+
             showAlert("Navigation Error",
                 "Could not open " + fxmlFile);
         }

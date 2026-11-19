@@ -1,4 +1,5 @@
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,4 +41,44 @@ public class BankData {
         transactions.clear();
         nextTransactionID = 1;
     }
+
+    public static void initialiseFromDatabase() throws SQLException {
+
+    CustomerDAO customerDAO = new CustomerDAO();
+    AccountDAO accountDAO = new AccountDAO();
+    TransactionDAO transactionDAO = new TransactionDAO();
+
+    // Load customers
+    List<Customer> customers = customerDAO.getCustomers();
+
+    if (customers.isEmpty()) {
+        throw new SQLException("No customers found in database.");
+    }
+
+    customer = customers.get(0);
+
+    // Load accounts
+    List<Account> accounts = accountDAO.getAccounts();
+
+    for (Account account : accounts) {
+        customer.openAccount(account);
+
+        if (account instanceof SavingsAccount) {
+            savings = (SavingsAccount) account;
+        } else if (account instanceof InvestmentAccount) {
+            investment = (InvestmentAccount) account;
+        } else if (account instanceof ChequeAccount) {
+            cheque = (ChequeAccount) account;
+        }
+    }
+
+    // Load transactions
+    transactions = transactionDAO.getTransactions();
+
+    // Set the next transaction ID
+    nextTransactionID = transactions.stream()
+        .mapToInt(Transaction::getTransactionID)
+        .max()
+        .orElse(0) + 1;
+}
 }

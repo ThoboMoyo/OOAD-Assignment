@@ -1,4 +1,3 @@
-
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -7,7 +6,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Alert;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.stage.Stage;
+
+import java.sql.SQLException;
 
 public class AccountsController {
 
@@ -68,9 +70,33 @@ public class AccountsController {
             numberColumn, typeColumn, branchColumn, balanceColumn
         );
 
-        accountsTable.getItems().setAll(
-            BankData.customer.getAccount()
-        );
+        // Load the latest accounts directly from SQL Server
+        loadAccounts();
+    }
+
+    private void loadAccounts() {
+
+        try {
+            AccountDAO accountDAO = new AccountDAO();
+
+            accountsTable.setItems(
+                FXCollections.observableArrayList(
+                    accountDAO.getAccounts()
+                )
+            );
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Database Error");
+            alert.setHeaderText("Could not load accounts");
+            alert.setContentText(
+                "Please check your database connection and try again."
+            );
+            alert.showAndWait();
+        }
     }
 
     @FXML
