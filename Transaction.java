@@ -9,14 +9,24 @@ public class Transaction {
     private LocalDateTime transactionDate;
     private String accountNumber;
 
+    // Existing constructor
     public Transaction(int transactionID, String transactionType,
                        double amount, String accountNumber) {
+
+        this(transactionID, transactionType, amount,
+             accountNumber, LocalDateTime.now());
+    }
+
+    // New constructor with database transaction date
+    public Transaction(int transactionID, String transactionType,
+                       double amount, String accountNumber,
+                       LocalDateTime transactionDate) {
 
         this.transactionID = transactionID;
         this.transactionType = transactionType;
         this.amount = amount;
         this.accountNumber = accountNumber;
-        this.transactionDate = LocalDateTime.now();
+        this.transactionDate = transactionDate;
     }
 
     public int getTransactionID() {

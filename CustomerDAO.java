@@ -84,4 +84,59 @@ public class CustomerDAO {
 
     return customers;
 }
+
+
+public void updateCustomer(int customerID, Customer customer,
+                           String employmentStatus,
+                           String companyName,
+                           String companyAddress) throws SQLException {
+
+    String sql = """
+        UPDATE Customers
+        SET FirstName = ?, Surname = ?, Address = ?,
+            EmploymentStatus = ?, CompanyName = ?, CompanyAddress = ?
+        WHERE CustomerID = ?
+        """;
+
+    try (Connection connection = DBConnection.getConnection();
+         PreparedStatement statement = connection.prepareStatement(sql)) {
+
+        statement.setString(1, customer.getFirstname());
+        statement.setString(2, customer.getSurname());
+        statement.setString(3, customer.getAddress());
+        statement.setString(4, employmentStatus);
+        statement.setString(5, companyName);
+        statement.setString(6, companyAddress);
+        statement.setInt(7, customerID);
+
+        int rowsUpdated = statement.executeUpdate();
+
+        if (rowsUpdated == 0) {
+            throw new SQLException("Customer not found.");
+        }
+
+        System.out.println("Customer updated successfully!");
+    }
+}
+
+
+public void deleteCustomer(int customerID) throws SQLException {
+
+    String sql = "DELETE FROM Customers WHERE CustomerID = ?";
+
+    try (Connection connection = DBConnection.getConnection();
+         PreparedStatement statement = connection.prepareStatement(sql)) {
+
+        statement.setInt(1, customerID);
+
+        int rowsDeleted = statement.executeUpdate();
+
+        if (rowsDeleted == 0) {
+            throw new SQLException("Customer not found.");
+        }
+
+        System.out.println("Customer deleted successfully!");
+    }
+}
+
 }

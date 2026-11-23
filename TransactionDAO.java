@@ -67,7 +67,8 @@ public class TransactionDAO {
         }
     }
 
-    public List<Transaction> getTransactions() throws SQLException {
+
+public List<Transaction> getTransactions() throws SQLException {
     List<Transaction> transactions = new ArrayList<>();
 
     String sql = "SELECT * FROM Transactions ORDER BY TransactionID";
@@ -77,11 +78,15 @@ public class TransactionDAO {
          ResultSet result = statement.executeQuery()) {
 
         while (result.next()) {
+
+            Timestamp timestamp = result.getTimestamp("TransactionDate");
+
             Transaction transaction = new Transaction(
                 result.getInt("TransactionID"),
                 result.getString("TransactionType"),
                 result.getDouble("Amount"),
-                result.getString("AccountNumber")
+                result.getString("AccountNumber"),
+                timestamp.toLocalDateTime()
             );
 
             transactions.add(transaction);
@@ -90,4 +95,56 @@ public class TransactionDAO {
 
     return transactions;
 }
+
+
+public void updateTransaction(int transactionID, String transactionType,
+                              double amount) throws SQLException {
+
+    if (amount <= 0 || !Double.isFinite(amount)) {
+        throw new IllegalArgumentException("Invalid transaction amount.");
+    }
+
+    String sql = """
+        UPDATE Transactions
+        SET TransactionType = ?, Amount = ?
+        WHERE TransactionID = ?
+        """;
+
+    try (Connection connection = DBConnection.getConnection();
+         PreparedStatement statement = connection.prepareStatement(sql)) {
+
+        statement.setString(1, transactionType);
+        statement.setDouble(2, amount);
+        statement.setInt(3, transactionID);
+
+        int rowsUpdated = statement.executeUpdate();
+
+        if (rowsUpdated == 0) {
+            throw new SQLException("Transaction not found.");
+        }
+
+        System.out.println("Transaction updated successfully!");
+    }
+}
+
+
+public void deleteTransaction(int transactionID) throws SQLException {
+
+    String sql = "DELETE FROM Transactions WHERE TransactionID = ?";
+
+    try (Connection connection = DBConnection.getConnection();
+         PreparedStatement statement = connection.prepareStatement(sql)) {
+
+        statement.setInt(1, transactionID);
+
+        int rowsDeleted = statement.executeUpdate();
+
+        if (rowsDeleted == 0) {
+            throw new SQLException("Transaction not found.");
+        }
+
+        System.out.println("Transaction deleted successfully!");
+    }
+}
+
 }

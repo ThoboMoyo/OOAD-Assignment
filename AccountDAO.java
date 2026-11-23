@@ -174,4 +174,25 @@ public void depositAndRecord(String accountNumber, double amount)
         }
     }
 }
+
+
+public void deleteAccount(String accountNumber) throws SQLException {
+
+    String sql = "DELETE FROM Accounts WHERE AccountNumber = ?";
+
+    try (Connection connection = DBConnection.getConnection();
+         PreparedStatement statement = connection.prepareStatement(sql)) {
+
+        statement.setString(1, accountNumber);
+
+        int rowsDeleted = statement.executeUpdate();
+
+        if (rowsDeleted == 0) {
+            throw new SQLException("Account not found.");
+        }
+
+        System.out.println("Account deleted successfully!");
+    }
+}
+
 }
